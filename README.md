@@ -1,2 +1,2 @@
-# College
-Lab programs 
+# Lab Programs for ISE
+
