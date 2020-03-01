@@ -32,11 +32,7 @@ void main()
 	bool arr[size]={0};
 	int count=0;
 
-	print 139994
- 139997
- 139998
- 139999
-f("Enter number of array elements\n");
+	printf("Enter number of array elements\n");
 	scanf("%d",&n);
 
 	printf("Enter array elements one by one\n");
