@@ -12,13 +12,13 @@ loop	subs r1,r1,#1
 	beq go
 	ldr r2,[r0],#4
 	cmp max,r2
-	bgt small
+	bge small
 	mov max,r2
 	b loop
 
 small	cmp min,r2
-	bgt less
-	bx lr
+	bge less
+	b loop
 
 less	mov min,r2
 	b loop
