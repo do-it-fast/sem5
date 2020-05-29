@@ -27,6 +27,9 @@ next	mov r2,#0x00
 	cmp len1,#0
 	beq same
 	
+	adr r0,string1	; r0 and r1 have changed due to post increment - needed re initialization
+	adr r1,string2	
+	
 loop	ldrb r5,[r0],#1		;comparing
 	ldrb r6,[r1],#1
 	cmp r5,r6
