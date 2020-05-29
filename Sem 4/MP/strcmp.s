@@ -46,4 +46,7 @@ done 	mov r4,#0x40000001C
 
 go 	b go
 
+
+string1 dcb "Micro",0
+string2 dcb "Macro",0
 	end
