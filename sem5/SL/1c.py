@@ -11,5 +11,6 @@ def find_max(ls):
 for i in range(n):
 	ls.append(int(input()))
 print(ls)
+
 count = find_max(ls)
 print(count)

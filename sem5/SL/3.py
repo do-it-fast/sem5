@@ -1,4 +1,3 @@
-from collections import OrderedDict
 
 class sentence: #class definition
 	st = ""
@@ -35,9 +34,12 @@ def print_vow(ls2): #printing strings in order according to vowel count
 st_class = sentence("This is a test case") #instances of class
 st2_class = sentence("hello world")
 st3_class = sentence("good morning")
+
 print("\nStrings initialised are:\n")
 print(st_class.st+"\n"+st2_class.st+"\n"+st3_class.st+"\n\n")
+
 ls2 = [st_class.rev(),st2_class.rev(),st3_class.rev()] #making a list of the strings instances
+
 print("Reversed Strings in descending order of vowels: \n")
 print_vow(ls2)
 #rev_string = st_class.rev()
