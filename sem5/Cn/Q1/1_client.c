@@ -8,7 +8,7 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<stdlib.h>
-#include<arpa/inet.h>
+#include<arpa/inet.h>		//missing header in original file
 int main(int argc , char **argv)
 {
 		int cs , n;
