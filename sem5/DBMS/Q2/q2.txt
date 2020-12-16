@@ -1,0 +1,246 @@
+
+SQL> create table part(
+  2  pid number(2) primary key,
+  3  pname varchar(15),
+  4  color varchar(10));
+
+Table created.
+
+SQL> create table supplier(
+  2  sid number(2) primary key,
+  3  sname varchar(15)
+  4  );
+
+Table created.
+
+SQL> create table shipment(
+  2  sid number(2) references supplier(sid),
+  3  pid number(2) references part(pid) ondelete cascade,
+  4  quantity number(3),
+  5  primary key(sid,pid));
+pid number(2) references part(pid) ondelete cascade,
+                                   *
+ERROR at line 3:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table shipment(
+  2  sid number(2) references supplier(sid) on delete cascade,
+  3  pid number(2) references part(pid) on delete cascade,
+  4  quantity number(3),
+  5  primary key(sid,pid));
+
+Table created.
+
+SQL> desc part
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID					   NOT NULL NUMBER(2)
+ PNAME						    VARCHAR2(15)
+ COLOR						    VARCHAR2(10)
+
+SQL> insert into part values(&pid,'&pname','&color');
+Enter value for pid: 11
+Enter value for pname: case
+Enter value for color: black
+old   1: insert into part values(&pid,'&pname','&color')
+new   1: insert into part values(11,'case','black')
+
+1 row created.
+
+SQL> /
+Enter value for pid: 12
+Enter value for pname: motherboard
+Enter value for color: green
+old   1: insert into part values(&pid,'&pname','&color')
+new   1: insert into part values(12,'motherboard','green')
+
+1 row created.
+
+SQL> /
+Enter value for pid: 13
+Enter value for pname: mouse
+Enter value for color: white
+old   1: insert into part values(&pid,'&pname','&color')
+new   1: insert into part values(13,'mouse','white')
+
+1 row created.
+
+SQL> desc supplier
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID					   NOT NULL NUMBER(2)
+ SNAME						    VARCHAR2(15)
+
+SQL> insert into supplier values(&sid,'&sname');
+Enter value for sid: 51
+Enter value for sname: asus
+old   1: insert into supplier values(&sid,'&sname')
+new   1: insert into supplier values(51,'asus')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 52
+Enter value for sname: acer
+old   1: insert into supplier values(&sid,'&sname')
+new   1: insert into supplier values(52,'acer')
+
+1 row created.
+
+SQL> desc shipment
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID					   NOT NULL NUMBER(2)
+ PID					   NOT NULL NUMBER(2)
+ QUANTITY					    NUMBER(3)
+
+SQL> insert into shipment values(&sid,&pid,&quantity);
+Enter value for sid: 51
+Enter value for pid: 11
+Enter value for quantity: 3
+old   1: insert into shipment values(&sid,&pid,&quantity)
+new   1: insert into shipment values(51,11,3)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 51
+Enter value for pid: 12
+Enter value for quantity: 4
+old   1: insert into shipment values(&sid,&pid,&quantity)
+new   1: insert into shipment values(51,12,4)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 52
+Enter value for pid: 11
+Enter value for quantity: 1
+old   1: insert into shipment values(&sid,&pid,&quantity)
+new   1: insert into shipment values(52,11,1)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 52
+Enter value for pid: 12
+Enter value for quantity: 2
+old   1: insert into shipment values(&sid,&pid,&quantity)
+new   1: insert into shipment values(52,12,2)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 52
+Enter value for pid: 13
+Enter value for quantity: 4
+old   1: insert into shipment values(&sid,&pid,&quantity)
+new   1: insert into shipment values(52,13,4)
+
+1 row created.
+
+SQL> select * from part
+  2  ;
+
+       PID PNAME	   COLOR
+---------- --------------- ----------
+	11 case 	   black
+	12 motherboard	   green
+	13 mouse	   white
+
+SQL> select * from supplier;
+
+       SID SNAME
+---------- ---------------
+	51 asus
+	52 acer
+
+SQL> select * from shipment;
+
+       SID	  PID	QUANTITY
+---------- ---------- ----------
+	51	   11	       3
+	51	   12	       4
+	52	   11	       1
+	52	   12	       2
+	52	   13	       4
+
+SQL> select * from part
+  2  where part.pid = shipment.pid and shipment.pid =(
+  3  select sid from supplier
+  4  where sname = 'asus');
+where part.pid = shipment.pid and shipment.pid =(
+                                  *
+ERROR at line 2:
+ORA-00904: "SHIPMENT"."PID": invalid identifier
+
+
+SQL> select * from part,shipment
+  2  where part.pid = shipment.pid and shipment.pid = (
+  3  select sid from supplier where sname = 'asus');
+
+no rows selected
+
+SQL> select * from part,shipment
+  2  where part.pid = shipment.pid and shipment.sid = (
+  3  select sid from supplier where sname = 'asus');
+
+       PID PNAME	   COLOR	     SID	PID   QUANTITY
+---------- --------------- ---------- ---------- ---------- ----------
+	11 case 	   black	      51	 11	     3
+	12 motherboard	   green	      51	 12	     4
+
+SQL> select sname from supploier
+  2  ;
+select sname from supploier
+                  *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select sname from supplier
+  2  where ;
+where
+     *
+ERROR at line 2:
+ORA-00936: missing expression
+
+
+SQL> select sname from supplier,shipment
+  2  where supplier.sid = shipment.sid and shipment.pid = (
+  3  select pid from part where pname = 'mouse');
+
+SNAME
+---------------
+acer
+
+SQL> delete from part where color = 'black';
+
+1 row deleted.
+
+SQL> select * from part
+  2  ;
+
+       PID PNAME	   COLOR
+---------- --------------- ----------
+	12 motherboard	   green
+	13 mouse	   white
+
+SQL> select * from supplier
+  2  ;
+
+       SID SNAME
+---------- ---------------
+	51 asus
+	52 acer
+
+SQL> select * from shipment;
+
+       SID	  PID	QUANTITY
+---------- ---------- ----------
+	51	   12	       4
+	52	   12	       2
+	52	   13	       4
+
+SQL> 

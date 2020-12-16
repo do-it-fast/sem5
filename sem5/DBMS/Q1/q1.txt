@@ -1,0 +1,454 @@
+﻿
+SQL> create table employee(
+  2  empno varchar(3) primary key,
+  3  ename varchar(20),
+  4  dept varchar(3)
+  5  );
+
+Table created.
+
+SQL> create table empproj(
+  2  ;
+
+SQL> create table project(
+  2  pno varchar(3) primary key,
+  3  pname varchar(10)
+  4  );
+create table project(
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table eproject(
+  2  pno varchar(3) primary key,
+  3  pname varchar(10)
+  4  );
+
+Table created.
+
+SQL> create table eproject_rel(
+  2  empno varchar(3) references employee(empno),
+  3  pno varchar(3) references eproject(pno),
+  4  primary key(empno,pno));
+
+Table created.
+
+SQL> insert into employee values('&empno','&ename','&dept');
+Enter value for empno: e1
+Enter value for ename: Alice
+Enter value for dept: d1
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e1','Alice','d1')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e2
+Enter value for ename: Bob
+Enter value for dept: d2
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e2','Bob','d2')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e3
+Enter value for ename: John
+Enter value for dept: d1
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e3','John','d1')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e4
+Enter value for ename: Yadu
+Enter value for dept: d4
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e4','Yadu','d4')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e5
+Enter value for ename: naham
+Enter value for dept: d3
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e5','naham','d3')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e6
+Enter value for ename: jason
+Enter value for dept: d2
+old   1: insert into employee values('&empno','&ename','&dept')
+new   1: insert into employee values('e6','jason','d2')
+
+1 row created.
+
+SQL> select * from employee
+  2  ;
+
+EMP ENAME		 DEP
+--- -------------------- ---
+e1  Alice		 d1
+e2  Bob 		 d2
+e3  John		 d1
+e4  Yadu		 d4
+e5  naham		 d3
+e6  jason		 d2
+
+6 rows selected.
+
+SQL> desc eproject
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PNO					   NOT NULL VARCHAR2(3)
+ PNAME						    VARCHAR2(10)
+
+SQL> insert into eproject values('&pno','&pname');
+Enter value for pno: p1
+Enter value for pname: hydro
+old   1: insert into eproject values('&pno','&pname')
+new   1: insert into eproject values('p1','hydro')
+
+1 row created.
+
+SQL> /
+Enter value for pno: p2
+Enter value for pname: electro
+old   1: insert into eproject values('&pno','&pname')
+new   1: insert into eproject values('p2','electro')
+
+1 row created.
+
+SQL> /
+Enter value for pno: p3
+Enter value for pname: Pyro
+old   1: insert into eproject values('&pno','&pname')
+new   1: insert into eproject values('p3','Pyro')
+
+1 row created.
+
+SQL> select * from eproject
+  2  ;
+
+PNO PNAME
+--- ----------
+p1  hydro
+p2  electro
+p3  Pyro
+
+SQL> desc eproject_rel
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO					   NOT NULL VARCHAR2(3)
+ PNO					   NOT NULL VARCHAR2(3)
+
+SQL> insert into eproject_rel values('&empno','pno');
+Enter value for empno: e1
+old   1: insert into eproject_rel values('&empno','pno')
+new   1: insert into eproject_rel values('e1','pno')
+insert into eproject_rel values('e1','pno')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (IS25.SYS_C0014034) violated - parent key not
+found
+
+
+SQL> select * from employee
+  2  ;
+
+EMP ENAME		 DEP
+--- -------------------- ---
+e1  Alice		 d1
+e2  Bob 		 d2
+e3  John		 d1
+e4  Yadu		 d4
+e5  naham		 d3
+e6  jason		 d2
+
+6 rows selected.
+
+SQL> select * from eproject
+  2  ;
+
+PNO PNAME
+--- ----------
+p1  hydro
+p2  electro
+p3  Pyro
+
+SQL> insert into eproject_rel values('&empno','pno');
+Enter value for empno: e1
+old   1: insert into eproject_rel values('&empno','pno')
+new   1: insert into eproject_rel values('e1','pno')
+insert into eproject_rel values('e1','pno')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (IS25.SYS_C0014034) violated - parent key not
+found
+
+
+SQL> desc employee
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO					   NOT NULL VARCHAR2(3)
+ ENAME						    VARCHAR2(20)
+ DEPT						    VARCHAR2(3)
+
+SQL> desc eproj_rel
+ERROR:
+ORA-04043: object eproj_rel does not exist
+
+
+SQL> desc eproject_rel
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO					   NOT NULL VARCHAR2(3)
+ PNO					   NOT NULL VARCHAR2(3)
+
+SQL> insert into eproject_rel values('&empno','&pno');
+Enter value for empno: e1
+Enter value for pno: p2
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e1','p2')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e1
+Enter value for pno: p2
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e1','p2')
+insert into eproject_rel values('e1','p2')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (IS25.SYS_C0014032) violated
+
+
+SQL> /
+Enter value for empno: e2
+Enter value for pno: p2
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e2','p2')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e3
+Enter value for pno: p3
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e3','p3')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e4
+Enter value for pno: p3
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e4','p3')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e5
+Enter value for pno: p1
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e5','p1')
+
+1 row created.
+
+SQL> /
+Enter value for empno: e6
+Enter value for pno: p1
+old   1: insert into eproject_rel values('&empno','&pno')
+new   1: insert into eproject_rel values('e6','p1')
+
+1 row created.
+
+SQL> select * from eproject_rel;
+
+EMP PNO
+--- ---
+e1  p2
+e2  p2
+e3  p3
+e4  p3
+e5  p1
+e6  p1
+
+6 rows selected.
+
+SQL> select * from employee;
+
+EMP ENAME		 DEP
+--- -------------------- ---
+e1  Alice		 d1
+e2  Bob 		 d2
+e3  John		 d1
+e4  Yadu		 d4
+e5  naham		 d3
+e6  jason		 d2
+
+6 rows selected.
+
+SQL> select * from eproject;
+
+PNO PNAME
+--- ----------
+p1  hydro
+p2  electro
+p3  Pyro
+
+SQL> select count(empno)
+  2  from employee;
+
+COUNT(EMPNO)
+------------
+	   6
+
+SQL> select count(empno)
+  2  from employee
+  3  group by dept;
+
+COUNT(EMPNO)
+------------
+	   1
+	   2
+	   1
+	   2
+
+SQL> select dept,count(empno)
+  2  from employee
+  3  group by dept;
+
+DEP COUNT(EMPNO)
+--- ------------
+d3	       1
+d1	       2
+d4	       1
+d2	       2
+
+SQL> update eproject
+  2  set pname = 'database'
+  3  where pno = 'p1';
+
+1 row updated.
+
+SQL> select * from eproject
+  2  ;
+
+PNO PNAME
+--- ----------
+p1  database
+p2  electro
+p3  Pyro
+
+SQL> update eproject
+  2  set pname = 'oracle'
+  3  where pno ='p2';
+
+1 row updated.
+
+SQL> update eproject
+  2  set pname = 'cloud'
+  3  where pno = 'p3';
+
+1 row updated.
+
+SQL> select * from eproject;
+
+PNO PNAME
+--- ----------
+p1  database
+p2  oracle
+p3  cloud
+
+SQL> select ssn
+  2  from employee
+  3  where empno in (
+  4  selec;
+selec
+    *
+ERROR at line 4:
+ORA-00907: missing right parenthesis
+
+
+SQL> select empno 
+  2  from eproject 
+  3  where empno in (
+  4  select pno 
+  5  from ep;
+from ep
+      *
+ERROR at line 5:
+ORA-00907: missing right parenthesis
+
+
+SQL> select empno
+  2  from eproject_rel
+  3  where empno in (
+  4  select pno 
+  5  from ;
+from
+    *
+ERROR at line 5:
+ORA-00903: invalid table name
+
+
+SQL> select empno
+  2  from eproject_rel
+  3  where pno in(
+  4  select pno
+  5  from eproject
+  6  where pname = 'database');
+
+EMP
+---
+e5
+e6
+
+SQL> select dept,count(empno) as Count
+  2  from employee
+  3  group by dept
+  4  ;
+
+DEP	 COUNT
+--- ----------
+d3	     1
+d1	     2
+d4	     1
+d2	     2
+
+SQL> select empno
+  2  from eproject_rel,eproject
+  3  where eproject_rel.pno = eproject.pno and pname = 'database';
+
+EMP
+---
+e5
+e6
+
+SQL> update eproject_rel
+  2  set pno = 'p1'
+  3  where empno = 'e4';
+
+1 row updated.
+
+SQL> select * from eproject_rel;
+
+EMP PNO
+--- ---
+e1  p2
+e2  p2
+e3  p3
+e4  p1
+e5  p1
+e6  p1
+
+6 rows selected.
+
+
