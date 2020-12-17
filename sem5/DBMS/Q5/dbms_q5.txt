@@ -1,0 +1,279 @@
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SQL> create table books(
+  2  isbn varchar(10) primary key,
+  3  title varchar(20),
+  4  publisher varchar(15),
+  5  author varchar(15),
+  6  category varchar(10));
+
+Table created.
+
+SQL> create table student(
+  2  sid number(3) primary key,
+  3  sname varchar(15),
+  4  dept varchar(5));
+
+Table created.
+
+SQL> create table B_details(
+  2  sid number(3) references student(sid),
+  3  book_id varchar(10) references books(isbn),
+  4  );
+)
+*
+ERROR at line 4:
+ORA-00904: : invalid identifier
+
+
+SQL> create table B_details(
+  2  sid number(3) references student(sid),
+  3  book_id varchar(10) references books(isbn));
+
+Table created.
+
+SQL> desc books
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ISBN					   NOT NULL VARCHAR2(10)
+ TITLE						    VARCHAR2(20)
+ PUBLISHER					    VARCHAR2(15)
+ AUTHOR 					    VARCHAR2(15)
+ CATEGORY					    VARCHAR2(10)
+
+SQL> insert into books values('&isbn','&title','&publisher','&author','&category');
+Enter value for isbn: 123
+Enter value for title: DBMS for engg
+Enter value for publisher: navathe
+Enter value for author: nvt
+Enter value for category: database
+old   1: insert into books values('&isbn','&title','&publisher','&author','&category')
+new   1: insert into books values('123','DBMS for engg','navathe','nvt','database')
+
+1 row created.
+
+SQL> /
+Enter value for isbn: 342
+Enter value for title: mathematics
+Enter value for publisher: shiv
+Enter value for author: rd
+Enter value for category: maths
+old   1: insert into books values('&isbn','&title','&publisher','&author','&category')
+new   1: insert into books values('342','mathematics','shiv','rd','maths')
+
+1 row created.
+
+SQL> /
+Enter value for isbn: 522
+Enter value for title: biotech
+Enter value for publisher: biocon
+Enter value for author: thhs
+Enter value for category: biotech
+old   1: insert into books values('&isbn','&title','&publisher','&author','&category')
+new   1: insert into books values('522','biotech','biocon','thhs','biotech')
+
+1 row created.
+
+SQL> desc student;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID					   NOT NULL NUMBER(3)
+ SNAME						    VARCHAR2(15)
+ DEPT						    VARCHAR2(5)
+
+SQL> insert into student values(&sid,'&sname','&dept');
+Enter value for sid: 101
+Enter value for sname: Yadu
+Enter value for dept: ise
+old   1: insert into student values(&sid,'&sname','&dept')
+new   1: insert into student values(101,'Yadu','ise')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 111
+Enter value for sname: Pyth
+Enter value for dept: ece
+old   1: insert into student values(&sid,'&sname','&dept')
+new   1: insert into student values(111,'Pyth','ece')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 131
+Enter value for sname: vinay
+Enter value for dept: BT
+old   1: insert into student values(&sid,'&sname','&dept')
+new   1: insert into student values(131,'vinay','BT')
+
+1 row created.
+
+SQL> select * from books;
+
+ISBN	   TITLE		PUBLISHER	AUTHOR		CATEGORY
+---------- -------------------- --------------- --------------- ----------
+123	   DBMS for engg	navathe 	nvt		database
+342	   mathematics		shiv		rd		maths
+522	   biotech		biocon		thhs		biotech
+
+SQL> select * from student
+  2  ;
+
+       SID SNAME	   DEPT
+---------- --------------- -----
+       101 Yadu 	   ise
+       111 Pyth 	   ece
+       131 vinay	   BT
+
+SQL> desc B_details
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID						    NUMBER(3)
+ BOOK_ID					    VARCHAR2(10)
+
+SQL> delete b_details;
+
+0 rows deleted.
+
+SQL> create table bdetails(
+  2  sid number(3) references student(sid),
+  3  book_id varchar(10) references books(isbn),
+  4  primary key(sid,book_id));
+
+Table created.
+
+SQL> insert into bdetails values(&sid,'&book_id');
+Enter value for sid: 101
+Enter value for book_id: 123
+old   1: insert into bdetails values(&sid,'&book_id')
+new   1: insert into bdetails values(101,'123')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 101
+Enter value for book_id: 342
+old   1: insert into bdetails values(&sid,'&book_id')
+new   1: insert into bdetails values(101,'342')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 111
+Enter value for book_id: 123
+old   1: insert into bdetails values(&sid,'&book_id')
+new   1: insert into bdetails values(111,'123')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 131
+Enter value for book_id: 342
+old   1: insert into bdetails values(&sid,'&book_id')
+new   1: insert into bdetails values(131,'342')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 131
+Enter value for book_id: 522
+old   1: insert into bdetails values(&sid,'&book_id')
+new   1: insert into bdetails values(131,'522')
+
+1 row created.
+
+SQL> select sname
+  2  from bdetails,student
+  3  where bdetails.sid = student.sid and bdetails.book_id = 123;
+
+SNAME
+---------------
+Yadu
+Pyth
+
+SQL> select sname
+  2  from bdetails,student
+  3  where bdetails.sid = students.sid and bdetails.book_id = (
+  4  select isbn from books
+  5  where category = 'database'));
+where category = 'database'))
+                            *
+ERROR at line 5:
+ORA-00933: SQL command not properly ended
+
+
+SQL> select sname
+  2  from bdetails,student
+  3  where bdetails.sid = students.sid and bdetails.book_id = (
+  4  select isbn from books
+  5  where books.category = 'database');
+where bdetails.sid = students.sid and bdetails.book_id = (
+                     *
+ERROR at line 3:
+ORA-00904: "STUDENTS"."SID": invalid identifier
+
+
+SQL> select sname
+  2  from bdetails,student
+  3  where bdetails.sid = student.sid and bdetails.book_id = (
+  4  select isbn
+  5  from books
+  6  where category = 'database');
+
+SNAME
+---------------
+Yadu
+Pyth
+
+SQL> select sid,count(sid)
+  2  from bdetails
+  3  group by sid;
+
+       SID COUNT(SID)
+---------- ----------
+       101	    2
+       111	    1
+       131	    2
+
+SQL> select sid,count(sid) as No of books
+  2  from bdetails
+  3  group by sid;
+select sid,count(sid) as No of books
+                            *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+SQL> select sid,count(sid) as no_books
+  2  from bdetails
+  3  group by sid;
+
+       SID   NO_BOOKS
+---------- ----------
+       101	    2
+       111	    1
+       131	    2
+
+SQL> 

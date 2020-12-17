@@ -1,0 +1,429 @@
+﻿student@iselab1:~$ sp
+Username: is25
+Password: 
+
+
+SQL*Plus: Release 12.2.0.1.0 Production on Wed Dec 16 14:08:23 2020
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> select * from tab
+  2  ;
+
+no rows selected
+
+SQL> create table sailor(
+  2  sid number(3) primary key,
+  3  sname varchar(15),
+  4  age number(2)
+  5  );
+
+Table created.
+
+SQL> create table boats(
+  2  bid number(3) primary key,
+  3  bname varchar(15),
+  4  color varchar(10));
+
+Table created.
+
+SQL> create table reserves(
+  2  sid number(3) references sailor(sid),
+  3  bid number(3) references boats(bid),
+  4  day date day_reserved,
+  5  primary key(sid,bid));
+day date day_reserved,
+         *
+ERROR at line 4:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table reserves(
+  2  sid number(3) references sailor(sid),
+  3  bid number(3) references boats(bid),
+  4  day_reserved datetime,
+  5  primary key(sid,bid));
+day_reserved datetime,
+             *
+ERROR at line 4:
+ORA-00902: invalid datatype
+
+
+SQL> create table reserves(
+  2  sid number(3) references sailor(sid),
+  3  bid number(3) references boats(bid),
+  4  day_reserved date,
+  5  primary key(sid,bid));
+
+Table created.
+
+SQL> select * from tab
+  2  ;
+
+TNAME			       TABTYPE	CLUSTERID
+------------------------------ ------- ----------
+SAILOR			       TABLE
+RESERVES		       TABLE
+BOATS			       TABLE
+
+SQL> desc sailor;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID					   NOT NULL NUMBER(3)
+ SNAME						    VARCHAR2(15)
+ AGE						    NUMBER(2)
+
+SQL> insert into sailor values(&sid,'&sname',&age);
+Enter value for sid: 11
+Enter value for sname: yadu
+Enter value for age: 25
+old   1: insert into sailor values(&sid,'&sname',&age)
+new   1: insert into sailor values(11,'yadu',25)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 12
+Enter value for sname: aakash
+Enter value for age: 41
+old   1: insert into sailor values(&sid,'&sname',&age)
+new   1: insert into sailor values(12,'aakash',41)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 13
+Enter value for sname: daksh
+Enter value for age: 37
+old   1: insert into sailor values(&sid,'&sname',&age)
+new   1: insert into sailor values(13,'daksh',37)
+
+1 row created.
+
+SQL> /
+Enter value for sid: 14
+Enter value for sname: umar
+Enter value for age: 51
+old   1: insert into sailor values(&sid,'&sname',&age)
+new   1: insert into sailor values(14,'umar',51)
+
+1 row created.
+
+SQL> select * from sailor;
+
+       SID SNAME		  AGE
+---------- --------------- ----------
+	11 yadu 		   25
+	12 aakash		   41
+	13 daksh		   37
+	14 umar 		   51
+
+SQL> desc boats;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BID					   NOT NULL NUMBER(3)
+ BNAME						    VARCHAR2(15)
+ COLOR						    VARCHAR2(10)
+
+SQL> insert into boats values(&bid,'&bname','&color');
+Enter value for bid: 31
+Enter value for bname: spb
+Enter value for color: white
+old   1: insert into boats values(&bid,'&bname','&color')
+new   1: insert into boats values(31,'spb','white')
+
+1 row created.
+
+SQL> /
+Enter value for bid: 32
+Enter value for bname: the week
+Enter value for color: purple
+old   1: insert into boats values(&bid,'&bname','&color')
+new   1: insert into boats values(32,'the week','purple')
+
+1 row created.
+
+SQL> /
+Enter value for bid: 33
+Enter value for bname: Jm
+Enter value for color: yellow
+old   1: insert into boats values(&bid,'&bname','&color')
+new   1: insert into boats values(33,'Jm','yellow')
+
+1 row created.
+
+SQL> desc reserves
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID					   NOT NULL NUMBER(3)
+ BID					   NOT NULL NUMBER(3)
+ DAY_RESERVED					    DATE
+
+SQL> insert into reserves values(&sid,&bid,&day_reserved);
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 12/12/2020
+old   1: insert into reserves values(&sid,&bid,&day_reserved)
+new   1: insert into reserves values(11,32,12/12/2020)
+insert into reserves values(11,32,12/12/2020)
+                                       *
+ERROR at line 1:
+ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+
+
+SQL> insert into reserves values(&sid,&bid,&day_reserved);
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: ;
+old   1: insert into reserves values(&sid,&bid,&day_reserved)
+new   1: insert into reserves values(11,32,;)
+insert into reserves values(11,32,;)
+                                  *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 2020-12-12
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'2020-12-12')
+insert into reserves values(11,32,'2020-12-12')
+                                  *
+ERROR at line 1:
+ORA-01861: literal does not match format string
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 12-12-2020
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'12-12-2020')
+insert into reserves values(11,32,'12-12-2020')
+                                  *
+ERROR at line 1:
+ORA-01843: not a valid month
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 2020-12-12
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'2020-12-12')
+insert into reserves values(11,32,'2020-12-12')
+                                  *
+ERROR at line 1:
+ORA-01861: literal does not match format string
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 12/12/2020
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'12/12/2020')
+insert into reserves values(11,32,'12/12/2020')
+                                  *
+ERROR at line 1:
+ORA-01843: not a valid month
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 2020/10/10
+Enter value for bid: ;
+Enter value for day_reserved: ;;
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(2020/10/10,;,';;')
+insert into reserves values(2020/10/10,;,';;')
+                                       *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 2020/10/10
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'2020/10/10')
+insert into reserves values(11,32,'2020/10/10')
+                                  *
+ERROR at line 1:
+ORA-01861: literal does not match format string
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 2014-07-23
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'2014-07-23')
+insert into reserves values(11,32,'2014-07-23')
+                                  *
+ERROR at line 1:
+ORA-01861: literal does not match format string
+
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 02-FEB-1978
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'02-FEB-1978')
+
+1 row created.
+
+SQL> delete from reserves where sid = 11 and bid = 32;
+
+1 row deleted.
+
+SQL> select * from reserves;
+
+no rows selected
+
+SQL> insert into reserves values(&sid,&bid,'&day_reserved');
+Enter value for sid: 11
+Enter value for bid: 32
+Enter value for day_reserved: 12-dec-2020
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(11,32,'12-dec-2020')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 12
+Enter value for bid: 31
+Enter value for day_reserved: 31-dec-2020
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(12,31,'31-dec-2020')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 12
+Enter value for bid: 33
+Enter value for day_reserved: 1-jan-2021
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(12,33,'1-jan-2021')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 13
+Enter value for bid: 31
+Enter value for day_reserved: 25-dec-2021
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(13,31,'25-dec-2021')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 13
+Enter value for bid: 32
+Enter value for day_reserved: 26-dec-2021
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(13,32,'26-dec-2021')
+
+1 row created.
+
+SQL> /
+Enter value for sid: 14
+Enter value for bid: 33
+Enter value for day_reserved: 29-dec-2021
+old   1: insert into reserves values(&sid,&bid,'&day_reserved')
+new   1: insert into reserves values(14,33,'29-dec-2021')
+
+1 row created.
+
+SQL> select * from reserves;
+
+       SID	  BID DAY_RESER
+---------- ---------- ---------
+	11	   32 12-DEC-20
+	12	   31 31-DEC-20
+	12	   33 01-JAN-21
+	13	   31 25-DEC-21
+	13	   32 26-DEC-21
+	14	   33 29-DEC-21
+
+6 rows selected.
+
+SQL> select * from sailor;
+
+       SID SNAME		  AGE
+---------- --------------- ----------
+	11 yadu 		   25
+	12 aakash		   41
+	13 daksh		   37
+	14 umar 		   51
+
+SQL> select * from boats;
+
+       BID BNAME	   COLOR
+---------- --------------- ----------
+	31 spb		   white
+	32 the week	   purple
+	33 Jm		   yellow
+
+SQL> select bid 
+  2  from boats,reserves
+  3  where boats.bid = reserves.bid and sid = (
+  4  select sid 
+  5  from sailor
+  6  where sname = 'aakash');
+select bid
+       *
+ERROR at line 1:
+ORA-00918: column ambiguously defined
+
+
+SQL> select boats.bid 
+  2  from boats,reserves
+  3  where boats.bid = reserves.bid and sid = (
+  4  select sid from sailor
+  5  where sname = 'aakash');
+
+       BID
+----------
+	31
+	33
+
+SQL> select bid
+  2  from boats
+  3  where bid not in (
+  4  select bid from reserves);
+
+no rows selected
+
+SQL> select * from reserves;
+
+       SID	  BID DAY_RESER
+---------- ---------- ---------
+	11	   32 12-DEC-20
+	12	   31 31-DEC-20
+	12	   33 01-JAN-21
+	13	   31 25-DEC-21
+	13	   32 26-DEC-21
+	14	   33 29-DEC-21
+
+6 rows selected.
+
+SQL> select sid,count(sid)
+  2  from reserves
+  3  group by sid;
+
+       SID COUNT(SID)
+---------- ----------
+	11	    1
+	12	    2
+	13	    2
+	14	    1
+
+SQL> 

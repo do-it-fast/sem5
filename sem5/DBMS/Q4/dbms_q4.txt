@@ -1,0 +1,251 @@
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SQL> create table warehouse(
+  2  wid number(3) primary key,
+  3  name varchar(10),
+  4  city varchar(10));
+
+Table created.
+
+SQL> create table parts(
+  2  pid number(3) primary key,
+  3  pname varchar(10),
+  4  color varchar(10));
+
+Table created.
+
+SQL> create table shipment(
+  2  wid number(3) references warehouse(wid),
+  3  pid number(3) references parts(pid),
+  4  quantity number(4),
+  5  primary key(wid,pid));
+
+Table created.
+
+SQL> desc warehouse
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ WID					   NOT NULL NUMBER(3)
+ NAME						    VARCHAR2(10)
+ CITY						    VARCHAR2(10)
+
+SQL> insert into warehouse values(&wid,'&name','city');
+Enter value for wid: 11
+Enter value for name: bb
+old   1: insert into warehouse values(&wid,'&name','city')
+new   1: insert into warehouse values(11,'bb','city')
+
+1 row created.
+
+SQL> select * from warehouse;
+
+       WID NAME       CITY
+---------- ---------- ----------
+	11 bb	      city
+
+SQL> update warehouse
+  2  set city = 'blr'
+  3  where wid = 11;
+
+1 row updated.
+
+SQL> insert into warehouse values(&wid,'&name','&city');
+Enter value for wid: 12
+Enter value for name: dd
+Enter value for city: delhi
+old   1: insert into warehouse values(&wid,'&name','&city')
+new   1: insert into warehouse values(12,'dd','delhi')
+
+1 row created.
+
+SQL> /
+Enter value for wid: 13
+Enter value for name: cc
+Enter value for city: chennai
+old   1: insert into warehouse values(&wid,'&name','&city')
+new   1: insert into warehouse values(13,'cc','chennai')
+
+1 row created.
+
+SQL> desc parts
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PID					   NOT NULL NUMBER(3)
+ PNAME						    VARCHAR2(10)
+ COLOR						    VARCHAR2(10)
+
+SQL> insert into parts values(&pid,'&pname','&color');
+Enter value for pid: 41
+Enter value for pname: nut
+Enter value for color: silver
+old   1: insert into parts values(&pid,'&pname','&color')
+new   1: insert into parts values(41,'nut','silver')
+
+1 row created.
+
+SQL> /
+Enter value for pid: 42
+Enter value for pname: bolt
+Enter value for color: white
+old   1: insert into parts values(&pid,'&pname','&color')
+new   1: insert into parts values(42,'bolt','white')
+
+1 row created.
+
+SQL> /
+Enter value for pid: 43
+Enter value for pname: ring
+Enter value for color: red
+old   1: insert into parts values(&pid,'&pname','&color')
+new   1: insert into parts values(43,'ring','red')
+
+1 row created.
+
+SQL> select * from parts
+  2  ;
+
+       PID PNAME      COLOR
+---------- ---------- ----------
+	41 nut	      silver
+	42 bolt       white
+	43 ring       red
+
+SQL> select * from warehouse
+  2  ;
+
+       WID NAME       CITY
+---------- ---------- ----------
+	11 bb	      blr
+	12 dd	      delhi
+	13 cc	      chennai
+
+SQL> desc shipment
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ WID					   NOT NULL NUMBER(3)
+ PID					   NOT NULL NUMBER(3)
+ QUANTITY					    NUMBER(4)
+
+SQL> insert into shipment values(&wid,&pid,&quantity);
+Enter value for wid: 11
+Enter value for pid: 41
+Enter value for quantity: 3
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(11,41,3)
+
+1 row created.
+
+SQL> /
+Enter value for wid: 11
+Enter value for pid: 42
+Enter value for quantity: 15
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(11,42,15)
+
+1 row created.
+
+SQL> /
+Enter value for wid: 12
+Enter value for pid: 41
+Enter value for quantity: 5
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(12,41,5)
+
+1 row created.
+
+SQL> /
+Enter value for wid: 12
+Enter value for pid: 42
+Enter value for quantity: 6
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(12,42,6)
+
+1 row created.
+
+SQL> /
+Enter value for wid: 12
+Enter value for pid: 43
+Enter value for quantity: 8
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(12,43,8)
+
+1 row created.
+
+SQL> /
+Enter value for wid: 13
+Enter value for pid: 41
+Enter value for quantity: 19
+old   1: insert into shipment values(&wid,&pid,&quantity)
+new   1: insert into shipment values(13,41,19)
+
+1 row created.
+
+SQL> select * from shipment;
+
+       WID	  PID	QUANTITY
+---------- ---------- ----------
+	11	   41	       3
+	11	   42	      15
+	12	   41	       5
+	12	   42	       6
+	12	   43	       8
+	13	   41	      19
+
+6 rows selected.
+
+SQL> select name 
+  2  from warehouse
+  3  where ;
+where
+     *
+ERROR at line 3:
+ORA-00936: missing expression
+
+
+SQL> 
+SQL> select name 
+  2  from warehouse,shipment
+  3  where warehouse.wid = shipment.wid and shipment.pid = (
+  4  select pid 
+  5  from parts 
+  6  where color = 'red');
+
+NAME
+----------
+dd
+
+SQL> select wid,count(wid)
+  2  from shipment
+  3  group by wid;
+
+       WID COUNT(WID)
+---------- ----------
+	11	    2
+	12	    3
+	13	    1
+
+SQL> select * 
+  2  from warehouse 
+  3  where wid = 
