@@ -5,10 +5,10 @@ import pandas as pd
 import numpy as np
 
 df = pd.read_csv("blackfri.csv")
-print("<-----Data Information----->")
+print("<-----Data Information----->\n")
 print("Head of Dataset")
 print(df.head(5))
-print("Head of Dataset")
+print("Head of Dataset\n")
 print(df.describe())
 print(df.info())
 
@@ -23,7 +23,7 @@ print(df.head(5))
 
 """e) Convert the attribute City_Category to have A to be Metro Cities, B to be Small Towns ,  C to be Villages."""
 print("Mapping values/attributes in City_Category to types")
-df['City_Category'] = df['City_Category'].map({'A':'Metro cities','B':'Small Towns','C':'Villages'})
+df['City_Category'] = df['City_Category'].map({'A':'Metro cities','B':'Towns','C':'Villages'})
 print(df.head(5))
 
 """f) Rename the attribute Product_Category_1 to have Baseball Caps, \n",
