@@ -10,22 +10,31 @@ int checksum(int fl)
     int i,sum=0,n,temp,temp1;
     scanf(" %[^\n]s",in); // SPACE REQUIRED BEFORE % TO TAKE IN A STRING INSTEAD OF ONE WORD
     //fgets(in,100,stdin);
+    
     if(strlen(in)%2!=0)
         n=(strlen(in)+1)/2;
     else
         n=(strlen(in))/2;
+    //printf("%ld is length\n , %d",strlen(in),n);
     for(i=0;i<n;i++)
     {
+        printf("%d\n",i);
         temp=in[i*2];
+        printf("%d ", temp);
         temp=(temp*256)+in[(i*2)+1];
+        printf(" %d",temp);
+
         sum=sum+temp;
+    	printf("%d",sum);
     }
+    
     if(fl==1)
     {
         printf("Enter the checksum value \n");
         scanf ("%x", &temp1);
         sum+=temp1;
     }
+    
     if(sum%65536!=0)
     {
         n=sum%65536;
