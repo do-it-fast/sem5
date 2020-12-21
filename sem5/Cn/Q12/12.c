@@ -60,7 +60,7 @@ int main()
     printf("\ne = %lf",e);
     printf("\nd = %lf",d);
     printf("\nEncrypted data = %lf",c);
-    printf("\nOriginal Message Sent = %lf",m);
+    printf("\nOriginal Message Sent = %lf\n",m);
  
     return 0;
 }

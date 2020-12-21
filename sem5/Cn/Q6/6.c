@@ -18,14 +18,14 @@ int checksum(int fl)
     //printf("%ld is length\n , %d",strlen(in),n);
     for(i=0;i<n;i++)
     {
-        printf("%d\n",i);
+        //printf("%d\n",i);
         temp=in[i*2];
-        printf("%d ", temp);
+        //printf("%d ", temp);
         temp=(temp*256)+in[(i*2)+1];
-        printf(" %d",temp);
+        //printf(" %d",temp);
 
         sum=sum+temp;
-    	printf("%d",sum);
+    	//printf("%d",sum);
     }
     
     if(fl==1)
@@ -41,7 +41,7 @@ int checksum(int fl)
         sum=(sum/65536) + n;
     }
     sum=65535-sum;
-    printf("%x\n",sum);
+    //printf("%x\n",sum);
     return sum;
 }
 
