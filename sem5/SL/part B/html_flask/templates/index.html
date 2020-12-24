@@ -14,7 +14,7 @@
 		<h5>{{msg}}</h5> <!-- Error Message displayed here -->
 
 		<!-- Form for amount details, with buttons to Deposit or Withdraw -->
-		<form action={{url_for('index')}} method="POST" id="atm">
+
 		 	Amount : <input name = "amount" type="number" required /><br>
 			<input type="submit" name="action" value="Withdraw" onclick="return validateForm(this)">
 			<input type="submit" name="action" value="Deposit" onclick="return validateForm(this)">
