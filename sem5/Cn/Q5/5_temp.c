@@ -87,13 +87,13 @@ int main() {
 	
 	printf("Enter the message to be sent(char limit: 124): \n");
 	fgets(dataWord, sizeof(dataWord), stdin);
-    strcat(dataWord, "0");
+    //strcat(dataWord, "0");
 	
     char* bin;
 	bin = charToBinary(dataWord[0]);
 	strcpy(augumentedDataword, bin);
     
-	for(int j=1, n=strlen(dataWord); j<n; j++) {
+	for(int j=1, n=strlen(dataWord); j<=n; j++) {
 		bin = charToBinary(dataWord[j]);
 		strcat(augumentedDataword, bin);
 	}
@@ -121,6 +121,7 @@ int main() {
 	
 	for(int j=0; j<noOfErrors; j++) {
 		int k = rand()%strlen(receiverCodeword)-1;
+		int n = 
 		receiverCodeword[k] = (receiverCodeword[k] == '0') ? '1' : '0';
 		printf("Error generated at %dth bit %dth character\n", k, 1+(k/8));
 	}
