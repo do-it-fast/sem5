@@ -20,7 +20,8 @@ for i in lis:
 		words[i] +=1
 
 sorted_words = dict(sorted(words.items(), key = lambda x:x[1],reverse = True))
-
+ls = list(words.values())
+print("\n",ls,"\n")
 top_ten = {x:sorted_words[x] for x in list(sorted_words)[:10]}
 print("top ten words with most occurrences:")
 for i in top_ten:

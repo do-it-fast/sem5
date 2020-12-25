@@ -50,7 +50,7 @@ void main()
 {
     //char st[100];
     int ch,sum;
-    //do{
+    do{
         printf("1.Encode \n2.Decode \n3.Exit \n");
         scanf("%d",&ch);
         printf("\n");
@@ -73,6 +73,6 @@ void main()
             case 3: break;
             default: printf("Invalid option, try again \n");
         }
-    //}while(ch!=3);
+    }while(ch!=3);
 }
  
