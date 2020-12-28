@@ -87,7 +87,7 @@ int main() {
 	
 	printf("Enter the message to be sent(char limit: 124): \n");
 	fgets(dataWord, sizeof(dataWord), stdin);
-    //strcat(dataWord, "0");
+    strcat(dataWord, " ");
 	
     char* bin;
 	bin = charToBinary(dataWord[0]);

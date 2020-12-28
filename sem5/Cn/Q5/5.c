@@ -75,21 +75,22 @@ void main()
     char dw[126],augdw[1018],div[18],rem[18],cw[1018],rcw[1018],bin[9],rdw[1001],msg[126];
     printf("Enter a Message to be sent (Max 125 Char)\n");
     fgets(dw, sizeof(dw), stdin);
-    //strcat(dw, "0");
+    //scanf(" %[^\n]s",dw);
+    strcat(dw, " ");
     binary(dw[0],bin);
     strcpy(augdw,bin);
     int j,k,e;
-    printf("%s",augdw);
+    //printf("%s",augdw);
     for(j=1;j<strlen(dw);j++)
     {
         binary(dw[j],bin);
         strcat(augdw,bin);
     }
-    printf("\n\n%s",augdw);
-    strcat(augdw,"0000000000000000");
-    printf("\n\n%s",augdw);
+    //printf("\n\n%s",augdw);
+    strcat(augdw,"000000000000000");
+    //printf("\n\n%s",augdw);
 
-    printf("\nEnter Divisor (generator) of 17 bits\n");
+    printf("\nEnter Divisor (generator) in decimals\n");
     scanf("%s",div);
     divide(augdw,div,rem);
     strcpy(cw,augdw);
@@ -108,17 +109,17 @@ void main()
             rcw[k]='0';
         printf("Error Generated at %d th bit %d thcharacter\n",k,(k/8)+1);
     }
-	printf("\n%s\n ",rcw);
+	//printf("\n%s\n ",rcw);
 
     divide(rcw,div,rem);
     
     if(e!=0)
         printf("\n\nErroneous Transmission detected!\n");
     strncpy(rdw,rcw,strlen(rcw)-16);
-    printf("%s\n",rdw);
+    //printf("%s\n",rdw);
     rdw[strlen(rcw)-16]='\0';
-    printf("%s\n ",rdw);
-    printf("%s\n ",rcw);
+    //printf("%s\n ",rdw);
+    //printf("%s\n ",rcw);
     for(j=0,k=0;j<strlen(rdw);j=j+8)
     {
         strncpy(bin,&rdw[j],8);
