@@ -87,7 +87,7 @@ void main()
         strcat(augdw,bin);
     }
     //printf("\n\n%s",augdw);
-    strcat(augdw,"000000000000000");
+    strcat(augdw,"0000000000000000");
     //printf("\n\n%s",augdw);
 
     printf("\nEnter Divisor (generator) in decimals\n");
